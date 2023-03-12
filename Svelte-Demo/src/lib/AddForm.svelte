@@ -1,25 +1,67 @@
 <script>
-  function addMovie() {
-    return true;
-  }
+  let movie = {};
+  let title;
+  export let addMovie;
+
+  console.log(movie);
+
+  const handleSubmit = (e) => {
+    const formData = new FormData(e.target);
+    console.log(formData);
+    for (let [key, value] of formData) {
+      console.log(key, value);
+      if (key == "title") {
+        title = value;
+      } else {
+        movie[key] = value;
+      }
+    }
+    addMovie(title, movie);
+  };
 </script>
 
 <div class="inputForm" style="order:1000">
   <h1 style="margin-top: 0px">Add a movie</h1>
-  <form>
+  <form on:submit|preventDefault={handleSubmit}>
     <label for="title">Movie title:</label><br />
-    <input type="text" id="ntitle" name="title" /><br />
+    <input type="text" id="ntitle" name="title" value={title ? title : ""} /><br
+    />
     <label for="plot">Plot:</label><br />
-    <input type="text" id="nplot" name="plot" /><br />
+    <input
+      type="text"
+      id="nplot"
+      name="plot"
+      value={movie.plot ? movie.plot : ""}
+    /><br />
     <label for="year">Year:</label><br />
-    <input type="text" id="nyear" name="year" /><br />
+    <input
+      type="text"
+      id="nyear"
+      name="year"
+      value={movie.year ? movie.year : ""}
+    /><br />
     <label for="runtime">Runtime:</label><br />
-    <input type="text" id="nruntime" name="runtime" /><br />
+    <input
+      type="text"
+      id="nruntime"
+      name="runtime"
+      value={movie.runtime ? movie.runtime : ""}
+    /><br />
     <label for="rating">Rating:</label><br />
-    <input type="text" id="nrating" name="rating" /><br />
+    <input
+      type="text"
+      id="nrating"
+      name="rating"
+      value={movie.rating ? movie.rating : ""}
+    /><br />
     <label for="cast">Cast:</label><br />
-    <input type="text" id="ncast" name="cast" /><br />
-    <button on:click={addMovie} type="button" class="btn"> Submit </button>
+    <input
+      type="text"
+      id="ncast"
+      name="cast"
+      value={movie.cast ? movie.cast : ""}
+    /><br />
+    <button type="submit" class="btn"> Submit </button>
   </form>
 </div>
 

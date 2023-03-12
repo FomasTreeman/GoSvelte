@@ -1,31 +1,43 @@
 <script>
-  function updateMovie() {
-    return true;
-  }
-  function closeForm() {
-    return true;
-  }
+  export let movie;
+  export let title;
+  export let updateMovie;
+
+  const handleSubmit = (e) => {
+    const formData = new FormData(e.target);
+    for (let [key, value] of formData) {
+      console.log(key, value);
+      movie[key] = value;
+    }
+    updateMovie(movie);
+  };
 </script>
 
 <div class="form-popup" id="editForm">
-  <h1 id="movieTitle" style="padding-bottom: 0.5rem" />
+  <h1 id="movieTitle" style="padding-bottom: 0.5rem">{title}</h1>
   <form class="form-container">
-    <form>
+    <form on:submit|preventDefault={handleSubmit}>
       <label for="plot">Plot</label><br />
-      <input type="text" id="uplot" name="plot" /><br />
+      <input type="text" id="uplot" name="plot" value={movie.plot} /><br />
       <label for="year">Year</label><br />
-      <input type="text" id="uyear" name="year" /><br />
+      <input type="text" id="uyear" name="year" value={movie.year} /><br />
       <label for="runtime">Runtime</label><br />
-      <input type="text" id="uruntime" name="runtime" /><br />
+      <input
+        type="text"
+        id="uruntime"
+        name="runtime"
+        value={movie.runtime}
+      /><br />
       <label for="rating">Rating</label><br />
-      <input type="text" id="urating" name="rating" /><br />
+      <input type="text" id="urating" name="rating" value={movie.rating} /><br
+      />
       <label for="cast">Cast</label><br />
-      <input type="text" id="ucast" name="cast" /><br />
-      <button type="button" class="form-btn" on:click={updateMovie}
-        >Make changes</button
-      >
-      <button type="button" class="form-btn cancel" on:click={closeForm}
-        >Close</button
+      <input type="text" id="ucast" name="cast" value={movie.cast} /><br />
+      <button type="submit" class="form-btn">Make changes</button>
+      <button
+        type="button"
+        class="form-btn cancel"
+        on:click={() => (movie = null)}>Close</button
       >
     </form>
   </form>
@@ -34,7 +46,6 @@
 <style>
   /* The popup form - hidden by default */
   .form-popup {
-    display: none;
     position: fixed;
     width: 95vw;
     bottom: 15px;
@@ -55,12 +66,11 @@
     margin: 5px 0 22px 0;
     border: none;
     width: 88vw;
-    background: #f1f1f1;
   }
 
   /* When the inputs get focus, do something */
   .form-container input[type="text"]:focus {
-    background-color: #ddd;
+    background-color: #514d4d;
     outline: none;
   }
 
@@ -82,8 +92,7 @@
   }
 
   /* Add some hover effects to buttons */
-  .form-container .form-btn:hover,
-  .open-button:hover {
+  .form-container .form-btn:hover {
     opacity: 1;
   }
 </style>

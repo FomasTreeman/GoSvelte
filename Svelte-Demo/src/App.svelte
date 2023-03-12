@@ -6,6 +6,20 @@
   let orderMethod;
   let asc = true;
   let sorted = Object.entries(movieData);
+  let movieToUpdate;
+  let titleToUpdate;
+
+  function updateMovie(movie) {
+    movieData[titleToUpdate] = movie;
+    sorted = applyOrder();
+    [movieToUpdate, titleToUpdate] = [null, null];
+  }
+
+  function addMovie(title, movie) {
+    movieData[title] = movie;
+    sorted = applyOrder();
+    [movieToUpdate, titleToUpdate] = [null, null];
+  }
 
   function changeOrder(orderBy) {
     if (orderMethod == orderBy) {
@@ -14,7 +28,7 @@
       asc = true;
     }
     orderMethod = orderBy;
-    applyOrder();
+    sorted = applyOrder();
   }
 
   function applyOrder() {
@@ -54,7 +68,9 @@
   console.log(Object.entries(movieData));
 </script>
 
-<div id="blur" style="display: none" />
+{#if movieToUpdate}
+  <div id="blur" />
+{/if}
 <div class="container">
   <header>Movie Data</header>
   <div class="dropdown">
@@ -64,15 +80,15 @@
     </a>
     <button class="dropbtn">Order</button>
     <div class="dropdown-content">
-      <a on:click={() => changeOrder("title")} href="#">Alphabetical</a>
-      <a on:click={() => changeOrder("year")} href="#">Year</a>
-      <a on:click={() => changeOrder("rating")} href="#">Rating</a>
-      <a on:click={() => changeOrder("runtime")} href="#">Runtime</a>
+      <button on:click={() => changeOrder("title")}>Alphabetical</button>
+      <button on:click={() => changeOrder("year")}>Year</button>
+      <button on:click={() => changeOrder("rating")}>Rating</button>
+      <button on:click={() => changeOrder("runtime")}>Runtime</button>
     </div>
   </div>
 </div>
 <div id="movies">
-  <AddForm />
+  <AddForm {addMovie} />
 
   {#each sorted as [title, movie]}
     <div class="card" id={title}>
@@ -85,11 +101,20 @@
       <li id="{title}.runtime">runtime: {movie.runtime}</li>
       <li id="{title}.rating">rating: {movie.rating}</li>
       <li id="{title}.cast">cast: {movie.cast}</li>
-      <button class="btn" on:click={() => openForm(title)}>edit</button>
+      <button
+        class="btn"
+        on:click={() => {
+          movieToUpdate = movie;
+          titleToUpdate = title;
+        }}>edit</button
+      >
     </div>
   {/each}
 </div>
-<EditForm />
+{#if movieToUpdate}
+  <p>hello</p>
+  <EditForm bind:movie={movieToUpdate} {updateMovie} title={titleToUpdate} />
+{/if}
 
 <style>
   #blur {
@@ -117,11 +142,6 @@
     flex-direction: column;
   }
 
-  input,
-  button {
-    color: #4d5d58;
-  }
-
   .btn {
     position: absolute;
     right: 21px;
@@ -134,7 +154,7 @@
   }
 
   .btn:hover {
-    opacity: 100%;
+    opacity: 50%;
   }
 
   .card {
@@ -183,16 +203,20 @@
   }
 
   /* Links inside the dropdown */
-  .dropdown-content a {
+  .dropdown-content button {
     color: black;
+    background-color: inherit;
+    text-align: left;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    width: 100%;
+    border: none;
   }
 
   /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {
-    background-color: #f1f1f1;
+  .dropdown-content button:hover {
+    background-color: #dedede;
   }
 
   /* Show the dropdown menu on hover */
